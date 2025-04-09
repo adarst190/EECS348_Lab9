@@ -8,6 +8,7 @@ into a matrix class, and then perform operations on the matrices.
 #include <iostream> 
 #include <fstream> 
 #include <string>
+#include <iomanip> //For setting precision of double output
 
 using namespace std;
 
@@ -15,40 +16,39 @@ class Matrix{
     private:
         int size; //Variable to hold size of the matrix
         int typeFlag; //Variable to hold type of the matrix (0 for int, 1 for double)
-        void* matrix; //Pointer to hold the matrix data (int or double)   
+        int** intMatrix; //Pointer to hold int data if applicable
+        double** doubleMatrix; //Pointer to hold double data if applicable
         
         void createMatrix(){    //Function to read the matrix from the file
             if (typeFlag == 0){ //If the matrix is of type int
-                int **intMatrix = new int*[size]; //Allocate memory for the matrix
+                intMatrix = new int*[size]; //Allocate memory for the matrix
                 for(int i = 0; i < size; i++){
                     intMatrix[i] = new int[size]; //Allocate memory for each row of the matrix
                 }
-                matrix = intMatrix; //Assign the int matrix to the matrix pointer
             } else { //If the matrix is of type double
-                double **doubleMatrix = new double*[size]; //Allocate memory for the matrix
+                doubleMatrix = new double*[size]; //Allocate memory for the matrix
                 for(int i = 0; i < size; i++){
                     doubleMatrix[i] = new double[size]; //Allocate memory for each row of the matrix
                 }
-                matrix = doubleMatrix; //Assign the double matrix to the matrix pointer
             }
         };
     public:
         Matrix(int size, int typeFlag){ //Constructor to initialize the matrix to either int or double depending on typeFlag
             this->size = size; //Set the size of the matrix
             this->typeFlag = typeFlag; //Set the type of the matrix
+            intMatrix = nullptr; //Initialize intMatrix to nullptr(Suggested by ChatGPT)
+            doubleMatrix = nullptr; //Initialize doubleMatrix to nullptr(Suggested by ChatGPT)
             createMatrix(); //Call the function to create the matrix
         }; 
 
         void fillMatrix(ifstream& inFile){ //Function to fill the matrix with data from the file
             if (typeFlag == 0){ //If the matrix is of type int
-                int **intMatrix = (int**)matrix; //Cast the matrix pointer to int**
                 for(int i = 0; i < size; i++){
                     for(int j = 0; j < size; j++){
                         inFile >> intMatrix[i][j]; //Read the matrix data from the file
                     }
                 }
             } else { //If the matrix is of type double
-                double **doubleMatrix = (double**)matrix; //Cast the matrix pointer to double**
                 for(int i = 0; i < size; i++){
                     for(int j = 0; j < size; j++){
                         inFile >> doubleMatrix[i][j]; //Read the matrix data from the file
@@ -56,11 +56,29 @@ class Matrix{
                 }
             }
         };
+
+        void printMatrix(){ //Function to print the matrix to the console
+            if (typeFlag == 0){ //If the matrix is type int
+                for(int i = 0; i < size; i++){
+                    for(int j = 0; j < size; j++){
+                        cout << intMatrix[i][j] << " "; //Print the matrix data to the console
+                    }
+                    cout << endl; //Print a new line after each row of the matrix
+                }
+            } else { //If the matrix is of type double
+                cout << fixed << setprecision(2); //Set the precision for double output
+                for(int i = 0; i < size; i++){
+                    for(int j = 0; j < size; j++){
+                        cout << doubleMatrix[i][j] << " "; //Print the matrix data to the console
+                    }
+                    cout << endl; //Print a new line after each row of the matrix
+                }
+            }
+        };
     };
 
     int main(){
         string filename; //Variable to hold name of the input file
-        ifstream inFile; //Input file stream to read the matrix from the file
         int size; //Variable to hold the size of the matrix
         int typeFlag; //Variable to hold the type of the matrix (0 for int, 1 for double)
         cout << "Enter the name of input file: " << endl; //Ask user for name of input file
@@ -74,12 +92,16 @@ class Matrix{
 
         inFile >> size; //Read the size of the matrix from first line of the file
         inFile >> typeFlag; //Read the type of the matrix from the file
-        Matrix matrix(size, typeFlag); //Create a matrix with given size and typeFlag
-        matrix.fillMatrix(inFile); //Fill the matrix with data from the file
+        Matrix matrix1(size, typeFlag); //Create a matrix with given size and typeFlag
+        matrix1.fillMatrix(inFile); //Fill the matrix with data from the file
 
         Matrix matrix2(size, typeFlag); //Create a second matrix with given size and typeFlag
         matrix2.fillMatrix(inFile); //Fill the second matrix with data from the file
         
+        cout << "Matrix 1: " << endl; //Print the first matrix to the console
+        matrix1.printMatrix(); 
+        cout << "Matrix 2: " << endl; //Print the second matrix to the console
+        matrix2.printMatrix(); 
 
         return 0; //Exit the program
     }
