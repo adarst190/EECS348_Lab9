@@ -1,0 +1,15 @@
+# Compiler
+CXX = g++
+
+# Source and target
+SRC = main.cpp
+TARGET = matrix
+
+all: $(TARGET)
+
+$(TARGET): $(SRC)
+	$(CXX) -o $(TARGET) $(SRC)
+
+# Clean rule
+clean:
+	rm -f $(TARGET)
