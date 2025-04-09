@@ -95,6 +95,31 @@ class Matrix{
             return result; //Return the result matrix
         }
 
+        Matrix operator*(Matrix& otherMatrix){
+            Matrix result(size, typeFlag); //Create a result matrix of the same size and type
+            if (typeFlag == 0){ //If the matrix is of type int
+                for(int i = 0; i < size; i++){
+                    for(int j = 0; j < size; j++){
+                        result.intMatrix[i][j] = 0; //Initialize the result matrix to 0
+                        for(int k = 0; k < size; k++){
+                            result.intMatrix[i][j] += intMatrix[i][k] * otherMatrix.intMatrix[k][j]; //Multiply the two matrices
+                        }
+                    }
+                }
+            } else { //If the matrix is of type double
+                for(int i = 0; i < size; i++){
+                    for(int j = 0; j < size; j++){
+                        result.doubleMatrix[i][j] = 0.0; //Initialize the result matrix to 0.0
+                        for(int k = 0; k < size; k++){
+                            result.doubleMatrix[i][j] += doubleMatrix[i][k] * otherMatrix.doubleMatrix[k][j]; //Multiply the two matrices
+                        }
+                    }
+                }
+            }
+
+            return result; //Return the result matrix
+        }
+
         ~Matrix(){ //Destructor to free the allocated memory for the matrix
             if (typeFlag == 0){ //If the matrix is of type int
                 for(int i = 0; i < size; i++){
@@ -136,10 +161,11 @@ class Matrix{
         //cout << "Matrix 2: " << endl; //Print the second matrix to the console
         //matrix2.printMatrix(); 
 
-        cout << "Addition of the two matrices: " << endl; 
-        (matrix1 + matrix2).printMatrix(); //Print the result of addition
+        //cout << "Addition of the two matrices: " << endl; 
+        //(matrix1 + matrix2).printMatrix(); //Print the result of addition
 
-        cout << "Multiplication of the two matrices: " << endl; //Print the result of multiplication
+        //cout << "Multiplication of the two matrices: " << endl; //Print the result of multiplication
+        //(matrix1 * matrix2).printMatrix(); //Print the result of multiplication
 
         return 0; //Exit the program
     }
