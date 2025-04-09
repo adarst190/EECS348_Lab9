@@ -192,6 +192,28 @@ class Matrix{
             printMatrix(); //Print the matrix after swapping the columns
         }
 
+        void updateMatrixValue(){   //Function to update a value in the matrix
+            int row, col, value; //Variables to hold the row, column and value to update
+            cout << "Enter the row to update (0 to " << size - 1 << "): "; //Ask user for the row
+            cin >> row; //Get the row from user
+            cout << "Enter the column to update (0 to " << size - 1 << "): "; //Ask user for the column
+            cin >> col; //Get the column from user
+            cout << "Enter the value to update: "; //Ask user for the value to update
+            cin >> value; //Get the value from user
+
+            if(row < 0 || row >= size || col < 0 || col >= size){ //Check if the row and column are valid
+                cout << "Invalid row or column numbers." << endl; //Print error message
+                return; //Return from the function
+            }
+            if (typeFlag == 0){ //If the matrix is of type int
+                intMatrix[row][col] = value; //Update the value in the matrix
+            } else { //If the matrix is of type double
+                doubleMatrix[row][col] = value; //Update the value in the matrix
+            }
+            cout << "Matrix after updating value: " << endl; //Print the matrix after updating the value
+            printMatrix(); //Print the matrix after updating the value
+        }
+
         ~Matrix(){ //Destructor to free the allocated memory for the matrix
             if (typeFlag == 0){ //If the matrix is of type int
                 for(int i = 0; i < size; i++){
@@ -243,7 +265,9 @@ class Matrix{
         //matrix2.sumDiagonals(); //Call the function to sum the diagonals of the second matrix
 
         //matrix1.swapMatrixRows(); //Call the function to swap rows of the first matrix
-        matrix1.swapMatrixColumns(); //Call the function to swap columns of the first matrix
+        //matrix1.swapMatrixColumns(); //Call the function to swap columns of the first matrix
         
+        //matrix1.updateMatrixValue(); //Call the function to update a value in the first matrix
+
         return 0; //Exit the program
     }
