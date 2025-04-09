@@ -15,47 +15,71 @@ class Matrix{
     private:
         int size; //Variable to hold size of the matrix
         int typeFlag; //Variable to hold type of the matrix (0 for int, 1 for double)
-        void* matrix; //Pointer to hold the matrix data (int or double)
-        string fileName; //Variable to hold name of the input file
-        ifstream inFile; //Input file stream to read the matrix from the file
-        void readFile(){    //Function to read the matrix from the file
-            inFile >> size; //Read the size of the matrix from the file
-            inFile >> typeFlag; //Read the type of the matrix from the file
+        void* matrix; //Pointer to hold the matrix data (int or double)   
+        
+        void createMatrix(){    //Function to read the matrix from the file
             if (typeFlag == 0){ //If the matrix is of type int
                 int **intMatrix = new int*[size]; //Allocate memory for the matrix
                 for(int i = 0; i < size; i++){
                     intMatrix[i] = new int[size]; //Allocate memory for each row of the matrix
                 }
-                matrix = intMatrix; //Set the matrix pointer to the allocated memory
+                matrix = intMatrix; //Assign the int matrix to the matrix pointer
             } else { //If the matrix is of type double
                 double **doubleMatrix = new double*[size]; //Allocate memory for the matrix
                 for(int i = 0; i < size; i++){
                     doubleMatrix[i] = new double[size]; //Allocate memory for each row of the matrix
                 }
-                matrix = doubleMatrix; //Set the matrix pointer to the allocated memory
+                matrix = doubleMatrix; //Assign the double matrix to the matrix pointer
             }
+        };
+    public:
+        Matrix(int size, int typeFlag){ //Constructor to initialize the matrix to either int or double depending on typeFlag
+            this->size = size; //Set the size of the matrix
+            this->typeFlag = typeFlag; //Set the type of the matrix
+            createMatrix(); //Call the function to create the matrix
+        }; 
 
-            //Start reading in Values to the matrix
-            for (int i = 0; i < size; i++){         //Loop to read in the matrix from the file
-                for (int j = 0; j < size; j++){         //Loop to read in the matrix from the file
-                    if (typeFlag == 0){ //If the matrix is of type int
-                        inFile >> ((int**)matrix)[i][j]; //Read in the matrix from the file
-                    } else { //If the matrix is of type double
-                        inFile >> ((double**)matrix)[i][j]; //Read in the matrix from the file
+        void fillMatrix(ifstream& inFile){ //Function to fill the matrix with data from the file
+            if (typeFlag == 0){ //If the matrix is of type int
+                int **intMatrix = (int**)matrix; //Cast the matrix pointer to int**
+                for(int i = 0; i < size; i++){
+                    for(int j = 0; j < size; j++){
+                        inFile >> intMatrix[i][j]; //Read the matrix data from the file
+                    }
+                }
+            } else { //If the matrix is of type double
+                double **doubleMatrix = (double**)matrix; //Cast the matrix pointer to double**
+                for(int i = 0; i < size; i++){
+                    for(int j = 0; j < size; j++){
+                        inFile >> doubleMatrix[i][j]; //Read the matrix data from the file
                     }
                 }
             }
-        
-        }; 
-    public:
-        Matrix(string fileName){ //Constructor to initialize the matrix to either int or double depending on typeFlag
-            this->fileName = fileName; //Set the name of the input file
-            this->inFile.open(fileName); //Open the input file
-            readFile(); //Call the function to read the matrix from the file
-        }; 
+        };
     };
-    
+
     int main(){
+        string filename; //Variable to hold name of the input file
+        ifstream inFile; //Input file stream to read the matrix from the file
+        int size; //Variable to hold the size of the matrix
+        int typeFlag; //Variable to hold the type of the matrix (0 for int, 1 for double)
+        cout << "Enter the name of input file: " << endl; //Ask user for name of input file
+        cin >> filename; //Get name of input file from user
+
+        ifstream inFile(filename); //Open the input file
+        if (!inFile) { //Check if the file opened successfully 
+            cout << "Error opening file." << endl; //Print error message
+            return 1; //Return from the function
+        }
+
+        inFile >> size; //Read the size of the matrix from first line of the file
+        inFile >> typeFlag; //Read the type of the matrix from the file
+        Matrix matrix(size, typeFlag); //Create a matrix with given size and typeFlag
+        matrix.fillMatrix(inFile); //Fill the matrix with data from the file
+
+        Matrix matrix2(size, typeFlag); //Create a second matrix with given size and typeFlag
+        matrix2.fillMatrix(inFile); //Fill the second matrix with data from the file
+        
 
         return 0; //Exit the program
     }
