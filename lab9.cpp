@@ -120,6 +120,26 @@ class Matrix{
             return result; //Return the result matrix
         }
 
+        void sumDiagonals(){
+            double mainDiagSum = 0.0; //Variable to hold the sum of the main diagonal
+            double secDiagSum = 0.0; //Variable to hold the sum of the secondary diagonal
+
+            if (typeFlag == 0){ //If the matrix is of type int
+                for(int i = 0; i < size; i++){
+                    mainDiagSum += intMatrix[i][i]; //Sum the main diagonal
+                    secDiagSum += intMatrix[i][size - i - 1]; //Sum the secondary diagonal
+                }
+            } else { //If the matrix is of type double
+                for(int i = 0; i < size; i++){
+                    mainDiagSum += doubleMatrix[i][i]; //Sum the main diagonal
+                    secDiagSum += doubleMatrix[i][size - i - 1]; //Sum the secondary diagonal
+                }
+            }
+            cout << fixed << setprecision(2); //Set the precision for double output
+            cout << "Sum of the main diagonal: " << mainDiagSum << endl; //Print the sum of the main diagonal
+            cout << "Sum of the secondary diagonal: " << secDiagSum << endl; //Print the sum of the secondary diagonal
+        }
+
         ~Matrix(){ //Destructor to free the allocated memory for the matrix
             if (typeFlag == 0){ //If the matrix is of type int
                 for(int i = 0; i < size; i++){
@@ -166,6 +186,9 @@ class Matrix{
 
         //cout << "Multiplication of the two matrices: " << endl; //Print the result of multiplication
         //(matrix1 * matrix2).printMatrix(); //Print the result of multiplication
+
+        matrix1.sumDiagonals(); //Call the function to sum the diagonals of the first matrix
+        matrix2.sumDiagonals(); //Call the function to sum the diagonals of the second matrix
 
         return 0; //Exit the program
     }
